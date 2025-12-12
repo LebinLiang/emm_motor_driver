@@ -80,12 +80,18 @@ class MotorDriverNode(Node):
                     mid = m_cmd.get('id')
                     if mid is None: continue
                     
+                    val = int(m_cmd.get('val', 0))
+                    direction = int(m_cmd.get('dir', 0))
+                    if val < 0:
+                        direction = 1 if direction == 0 else 0
+                        val = abs(val)
+
                     ctrl_cmds.append({
                         'addr': mid,
-                        'direction': int(m_cmd.get('dir', 0)),
+                        'direction': direction,
                         'velocity': int(m_cmd.get('speed', 500)),
                         'acceleration': int(m_cmd.get('acc', 50)),
-                        'pulses': int(m_cmd.get('val', 0)),
+                        'pulses': val,
                         'relative': bool(m_cmd.get('rel', True))
                     })
                 self.controller.synchronous_position_control(ctrl_cmds)
@@ -98,10 +104,16 @@ class MotorDriverNode(Node):
                     mid = m_cmd.get('id')
                     if mid is None: continue
                     
+                    val = int(m_cmd.get('val', 0))
+                    direction = int(m_cmd.get('dir', 0))
+                    if val < 0:
+                        direction = 1 if direction == 0 else 0
+                        val = abs(val)
+
                     ctrl_cmds.append({
                         'addr': mid,
-                        'direction': int(m_cmd.get('dir', 0)),
-                        'velocity': int(m_cmd.get('val', 0)),
+                        'direction': direction,
+                        'velocity': val,
                         'acceleration': int(m_cmd.get('acc', 50))
                     })
                 self.controller.synchronous_velocity_control(ctrl_cmds)
@@ -147,6 +159,11 @@ class MotorDriverNode(Node):
                     acc = int(data.get('acc', 50))
                     direction = int(data.get('dir', 0))
                     rel = bool(data.get('rel', True))
+                    
+                    if val < 0:
+                        direction = 1 if direction == 0 else 0
+                        val = abs(val)
+                        
                     motor.position_control(direction, speed, acc, val, rel)
                     
         except json.JSONDecodeError:

@@ -3,5 +3,5 @@ motor_driver_node:
     serial_port: "/dev/ttyUSB0"
     baudrate: 115200
     loop_rate: 10.0  # Hz, 降低频率以适应串口通讯延迟
-    motor_ids: [1, 2]
+    motor_ids: [3, 4]
     motor_names: ["joint_1", "joint_2"]
